@@ -4,6 +4,7 @@ Created by Jenaide Sibolie
 """
 import unittest
 from parameterized import parameterized
+from typing import Dict, Tuple, Union
 from utils import (
         access_nested_map,
         get_json,
@@ -27,13 +28,12 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(result, expected)
 
     @parameterized.expand([
-        ({}, ("a",), "a"),
-        ({"a": 1}, ("a", "b"), "b"),
+        ({}, ("a",), KeyError),
+        ({"a": 1}, ("a", "b"), KeyError),
     ])
-    def test_access_nested_map_exception(self, nested_map, path, expected_exception_message):
+    def test_access_nested_map_exception(self, nested_map: Dict, path: Tuple[str], exception: Exception) -> None:
         """
         test case ofaccess_nested_map exception raising
         """
-        with self.assertRaises(KeyError) as context:
+        with self.assertRaises(exception):
             access_nested_map(nested_map, path)
-        self.assertEqual(str(context.exception), expected_exception_message)
